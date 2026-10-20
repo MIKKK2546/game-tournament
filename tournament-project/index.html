@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ทัวร์นาเมนต์เกม</title>
+<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@500;700&family=Sarabun:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f1f2f8;--card:#fff;--ink:#1c1e2e;--mut:#6b6f85;--line:#dcdeea;--ac:#3347ff;--acink:#fff;--danger:#d63a4a;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#14151f;--card:#1e2030;--ink:#eceefb;--mut:#9aa0bd;--line:#31344d;--ac:#7f8cff;--acink:#10122a;--danger:#ff7482}}
+:root[data-theme="dark"]{--bg:#14151f;--card:#1e2030;--ink:#eceefb;--mut:#9aa0bd;--line:#31344d;--ac:#7f8cff;--acink:#10122a;--danger:#ff7482}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 Sarabun,system-ui,sans-serif}
+main{max-width:960px;margin:0 auto;padding:20px 16px 48px}
+h1,h2,h3{font-family:Kanit,system-ui,sans-serif;margin:0}
+h1{font-size:clamp(2rem,7vw,3.4rem);line-height:1.1;font-weight:700}
+.hero{background:var(--ac);color:var(--acink);padding:28px 22px;border-radius:6px 28px 6px 28px}
+.hero p{margin:8px 0 18px;max-width:46ch;opacity:.92}
+button{font:inherit;cursor:pointer}
+.pri,.ghost,.danger{padding:9px 16px;border-radius:10px;border:2px solid transparent;font-weight:600}
+.pri{background:var(--ink);color:var(--bg)}
+.hero .pri{background:var(--acink);color:var(--ac)}
+.ghost{background:none;border-color:var(--line);color:var(--ink)}
+.hero .ghost{border-color:currentColor;color:inherit}
+.danger{background:none;color:var(--danger);border-color:var(--danger)}
+:focus-visible{outline:3px solid var(--ac);outline-offset:2px}
+.bar{display:flex;gap:10px;flex-wrap:wrap}
+.sec{font-size:1.25rem;margin:28px 0 10px}
+#games{display:flex;gap:10px;flex-wrap:wrap}
+.gc{display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:4px 6px 4px 4px}
+.x{border:0;background:none;color:var(--mut);padding:2px 8px}
+#chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.chip{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:5px 14px}
+.chip[aria-pressed=true]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+#teams{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:14px}
+.tc{display:flex;flex-direction:column;align-items:flex-start;text-align:left;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px;color:var(--ink)}
+.tc:hover{border-color:var(--ac)}
+.tc b{font-family:Kanit,sans-serif;font-size:1.1rem;margin-top:8px}
+.mut,small{color:var(--mut)}
+.empty{grid-column:1/-1;margin:0}
+img,.ph{object-fit:cover;display:block}
+.sm{width:36px;height:36px;border-radius:50%}
+.md{width:100%;aspect-ratio:1;border-radius:10px}
+.lg{width:84px;height:84px;border-radius:14px}
+.ph{display:grid;place-items:center;background:var(--line);color:var(--mut);font:700 1.2rem Kanit,sans-serif}
+dialog{border:0;border-radius:16px;padding:20px;width:min(460px,calc(100% - 24px));background:var(--card);color:var(--ink)}
+dialog::backdrop{background:#0008}
+label{display:block;margin:12px 0;font-weight:600}
+input,select{width:100%;font:inherit;padding:8px 10px;margin-top:4px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink)}
+.row{display:flex;gap:10px;justify-content:flex-end;margin-top:16px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
+.th{display:flex;gap:14px;align-items:center;margin-bottom:12px}
+.mem{list-style:none;padding:0;margin:8px 0 16px;display:grid;gap:8px}
+.mem li{display:flex;align-items:center;gap:10px}
+.mem span{flex:1}
+.wheelbox{display:grid;grid-template-columns:minmax(0,340px) 1fr;gap:24px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;align-items:start}
+@media(max-width:700px){.wheelbox{grid-template-columns:1fr}}
+.wcol{display:flex;flex-direction:column;gap:10px}
+.wwrap{position:relative;width:100%;max-width:320px;aspect-ratio:1;margin:0 auto}
+#wheel{width:100%;height:100%}
+.ptr{position:absolute;top:-6px;left:50%;transform:translateX(-50%);width:0;height:0;border:12px solid transparent;border-top:22px solid var(--ink);border-bottom:0;z-index:2}
+#result{font:700 1.4rem Kanit,sans-serif;text-align:center;min-height:2em;margin:0}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chk{display:flex;align-items:center;gap:8px;font-weight:400;margin:4px 0}
+.chk input{width:auto;margin:0}
+.bar2{display:flex;gap:8px}
+.bar2 input{flex:1;margin:0}
+.wcol p{margin:0}
+.pri:disabled{opacity:.5;cursor:default}
+.ptr{transform-origin:50% 0}
+.ptr.tick{animation:tick .12s ease-out}
+@keyframes tick{0%{transform:translateX(-50%) rotate(0)}35%{transform:translateX(-50%) rotate(-24deg)}100%{transform:translateX(-50%) rotate(0)}}
+#fx{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:3}
+.topnav{background:#0f1923}
+.brand{display:inline-block;background:#ff4655;color:#fff;font:700 1.15rem Kanit,sans-serif;padding:8px 40px 8px 18px;clip-path:polygon(0 0,100% 0,calc(100% - 18px) 100%,0 100%)}
+.tabs{display:flex;background:#0b131b;overflow-x:auto;padding-left:12px;scrollbar-width:none}
+.tab{flex:none;border:0;border-top:3px solid transparent;background:none;color:#aeb6bf;font:600 1rem Kanit,sans-serif;padding:11px 32px}
+.tab:hover{color:#fff}
+.tab:focus-visible{outline:3px solid #fff;outline-offset:-4px}
+.tab[aria-current=page]{background:#1f2b38;color:#fff;border-top-color:#fff;clip-path:polygon(14px 0,100% 0,calc(100% - 14px) 100%,0 100%)}
+.hero .stats{margin:16px 0 0;max-width:none;font-weight:600}
+.wm{flex:none;align-self:center;display:flex;align-items:center;color:#566170;font:600 1rem Kanit,sans-serif;margin-right:28px;padding-left:4px;user-select:none}
+.wm::before{content:"";width:10px;height:10px;background:currentColor;margin-right:10px;clip-path:polygon(0 0,70% 0,100% 50%,70% 100%,0 100%)}
+@media(max-width:600px){.wm{margin-right:8px}}
+.rounds{display:flex;gap:22px;overflow-x:auto;padding:6px 2px 14px}
+.rd{display:flex;flex-direction:column;min-width:210px;flex:none}
+.rd h3{font-size:1rem;color:var(--mut);margin-bottom:8px}
+.ms{display:flex;flex-direction:column;justify-content:space-around;flex:1;gap:12px}
+.mt{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.sl{display:flex;align-items:center;gap:8px;width:100%;padding:8px 10px;background:none;border:0;color:var(--ink);text-align:left;font:inherit}
+.sl+.sl{border-top:1px solid var(--line)}
+button.sl:not(:disabled):hover{background:var(--bg)}
+.sl:disabled{cursor:default}
+.sl.empty{color:var(--mut);padding:13px 10px;font-size:.9rem}
+.sl.win{background:var(--ac);color:var(--acink);font-weight:700}
+.sl.lose{opacity:.45}
+.champ{display:flex;align-items:center;gap:10px;background:var(--ac);color:var(--acink);border-radius:12px;padding:14px;font:700 1.1rem Kanit,sans-serif;margin:auto 0}
+.champ.none{background:var(--card);color:var(--mut);border:1px dashed var(--line);font-weight:400}
+#toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:10px;opacity:0;pointer-events:none;transition:opacity .2s;z-index:1000;max-width:90vw}
+#toast.on{opacity:1}
+</style>
+</head>
+<body>
+<nav class="topnav" aria-label="เมนูหลัก">
+  <div><span class="brand">ทัวร์นาเมนต์เกม</span></div>
+  <div class="tabs">
+    <span class="wm" aria-hidden="true">E-Sport</span>
+    <button class="tab" data-act="tab" data-id="home" aria-current="page">ภาพรวม</button>
+    <button class="tab" data-act="tab" data-id="games">เกม</button>
+    <button class="tab" data-act="tab" data-id="teams">ทีม</button>
+    <button class="tab" data-act="tab" data-id="wheel">วงล้อสุ่มทีม</button>
+    <button class="tab" data-act="tab" data-id="bracket">สายแข่ง</button>
+  </div>
+</nav>
+<main>
+  <div data-tab="home">
+  <header class="hero">
+    <h1>ทัวร์นาเมนต์เกม</h1>
+    <p>สร้างทีม เพิ่มสมาชิก ใส่รูปทีมและรูปเกมที่แข่ง</p>
+    <div class="bar">
+      <button class="pri" data-act="addTeam">เพิ่มทีม</button>
+      <button class="ghost" data-act="addGame">เพิ่มเกม</button>
+    </div>
+    <p id="stats" class="stats"></p>
+  </header>
+  </div>
+  <div data-tab="games" hidden>
+  <h2 class="sec">เกมที่แข่ง</h2>
+  <div class="bar" style="margin-bottom:12px"><button class="pri" data-act="addGame">เพิ่มเกม</button></div>
+  <div id="games"></div>
+  </div>
+  <div data-tab="teams" hidden>
+  <h2 class="sec">ทีมทั้งหมด</h2>
+  <div class="bar" style="margin-bottom:12px"><button class="pri" data-act="addTeam">เพิ่มทีม</button></div>
+  <div id="chips"></div>
+  <div id="teams"></div>
+  </div>
+  <div data-tab="wheel" hidden>
+  <h2 class="sec">วงล้อสุ่มทีม</h2>
+  <section class="wheelbox">
+    <div class="wcol">
+      <div class="wwrap"><div class="ptr"></div><canvas id="wheel" width="640" height="640" role="img" aria-label="วงล้อสุ่มทีม"></canvas><canvas id="fx" width="640" height="640" aria-hidden="true"></canvas></div>
+      <button class="pri" id="spin" data-act="spin">หมุนวงล้อ</button>
+      <p id="result" aria-live="polite"></p>
+    </div>
+    <div class="wcol">
+      <label for="wname">พิมพ์ชื่อทีมแล้วกดเพิ่ม</label>
+      <div class="bar2"><input id="wname" maxlength="30" placeholder="เช่น ทีมมังกร"><button class="ghost" data-act="wAdd">เพิ่ม</button></div>
+      <p class="mut">หรือกดชื่อทีมเพื่อใส่ในกล่องด้านบน แก้ชื่อได้ แล้วกดเพิ่ม</p>
+      <div id="wpick" class="chips"></div>
+      <p class="mut">ในวงล้อตอนนี้</p>
+      <div id="wlist" class="chips"></div>
+      <label class="chk"><input type="checkbox" id="wremove"> เอาทีมที่ถูกสุ่มออกหลังหมุน</label>
+      <div><button class="ghost" data-act="wClear">ล้างวงล้อ</button></div>
+    </div>
+  </section>
+  </div>
+  <div data-tab="bracket" hidden>
+  <h2 class="sec">สายทัวร์นาเมนต์</h2>
+  <p class="mut" style="margin:0 0 8px">เลือกทีมที่เข้าร่วม (อย่างน้อย 2 ทีม)</p>
+  <div id="bpick" class="chips"></div>
+  <label class="chk"><input type="checkbox" id="bshuffle" checked> สุ่มลำดับทีม</label>
+  <div class="bar" style="margin-bottom:16px"><button class="pri" data-act="bBuild">สร้างสายแข่ง</button><button class="ghost" data-act="bReset">ล้างสาย</button></div>
+  <p class="mut" style="margin:0 0 8px">กดชื่อทีมที่ชนะในแต่ละคู่ ทีมนั้นจะเข้ารอบต่อไป (กดซ้ำเพื่อยกเลิก)</p>
+  <div id="bracket"></div>
+  </div>
+</main>
+<dialog id="dlg"></dialog>
+<dialog id="cdlg"></dialog>
+<div id="toast" role="status" aria-live="polite"></div>
+<script>
+const KEY='tourney.v1';
+let S={games:[],teams:[]},filter='all';
+try{const r=localStorage.getItem(KEY);if(r)S=JSON.parse(r)}catch(e){}
+S.wheel=S.wheel||[];S.bsel=S.bsel||[];S.bracket=S.bracket||null;
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){notify('พื้นที่เก็บข้อมูลเต็ม ลองใช้รูปที่เล็กลง')}};
+const uid=()=>Math.random().toString(36).slice(2,9);
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const dlg=$('#dlg');
+function show(h){dlg.innerHTML=h;if(!dlg.open)dlg.showModal()}
+let tt;
+function notify(msg){const t=$('#toast');t.textContent=msg;t.classList.add('on');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('on'),2800)}
+function ask(msg){return new Promise(res=>{const d=$('#cdlg');d.innerHTML=`<p style="margin:0 0 4px;font-weight:600">${esc(msg)}</p><div class="row"><button type="button" class="ghost" data-c="0">ยกเลิก</button><button type="button" class="danger" data-c="1">ยืนยัน</button></div>`;d.querySelectorAll('button').forEach(b=>b.onclick=()=>{d.close();res(b.dataset.c==='1')});d.oncancel=()=>res(false);d.showModal()})}
+function shrink(f,max=360){return new Promise(res=>{if(!f||!f.size)return res('');const r=new FileReader();r.onload=()=>{const i=new Image();i.onload=()=>{const k=Math.min(1,max/Math.max(i.width,i.height)),c=document.createElement('canvas');c.width=i.width*k;c.height=i.height*k;c.getContext('2d').drawImage(i,0,0,c.width,c.height);res(c.toDataURL('image/jpeg',.8))};i.onerror=()=>res('');i.src=r.result};r.readAsDataURL(f)})}
+const thumb=(src,name,sz)=>src?`<img class="${sz}" src="${src}" alt="">`:`<div class="ph ${sz}">${esc((name||'?').trim()[0]||'?')}</div>`;
+
+function render(){
+  $('#games').innerHTML=S.games.map(g=>`<div class="gc">${thumb(g.img,g.name,'sm')}<span>${esc(g.name)}</span><button class="x" data-act="delGame" data-id="${g.id}" aria-label="ลบเกม ${esc(g.name)}">×</button></div>`).join('')||'<p class="mut">ยังไม่มีเกม เริ่มจากกด "เพิ่มเกม"</p>';
+  $('#chips').innerHTML=[{id:'all',name:'ทุกเกม'},...S.games].map(g=>`<button class="chip" aria-pressed="${filter===g.id}" data-act="filter" data-id="${g.id}">${esc(g.name)}</button>`).join('');
+  const ts=S.teams.filter(t=>filter==='all'||t.gameId===filter);
+  $('#teams').innerHTML=ts.map(t=>{const g=S.games.find(g=>g.id===t.gameId);return `<button class="tc" data-act="team" data-id="${t.id}">${thumb(t.img,t.name,'md')}<b>${esc(t.name)}</b><small>${g?esc(g.name):'-'}</small><small>${t.members.length} สมาชิก</small></button>`}).join('')||'<p class="mut empty">ยังไม่มีทีม กด "เพิ่มทีม" เพื่อสร้างทีมแรก</p>';
+  $('#stats').textContent='ตอนนี้มี '+S.games.length+' เกม, '+S.teams.length+' ทีม, '+S.teams.reduce((n,t)=>n+t.members.length,0)+' สมาชิก';
+  renderBracket();
+  renderWheel();
+}
+function formEditTeam(id){
+  const t=S.teams.find(t=>t.id===id);
+  show(`<form data-form="editTeam" data-id="${t.id}"><h2>แก้ไขทีม</h2><div class="th">${thumb(t.img,t.name,'lg')}<span class="mut">รูปปัจจุบัน</span></div><label>ชื่อทีม<input name="name" required maxlength="40" value="${esc(t.name)}"></label><label>เกมที่เล่น<select name="game">${S.games.map(g=>`<option value="${g.id}"${g.id===t.gameId?' selected':''}>${esc(g.name)}</option>`).join('')}</select></label><label>เปลี่ยนรูปทีม (ไม่เลือก = ใช้รูปเดิม)<input type="file" name="img" accept="image/*"></label>${t.img?'<label class="chk"><input type="checkbox" name="rmimg"> ลบรูปปัจจุบัน</label>':''}<div class="row"><button type="button" class="ghost" data-act="team" data-id="${t.id}">ยกเลิก</button><button class="pri">บันทึก</button></div></form>`);
+}
+function formEditMember(tid,mid){
+  const t=S.teams.find(t=>t.id===tid),m=t.members.find(m=>m.id===mid);
+  show(`<form data-form="editMember" data-team="${t.id}" data-id="${m.id}"><h2>แก้ไขสมาชิก</h2><div class="th">${thumb(m.img,m.name,'lg')}<span class="mut">รูปปัจจุบัน</span></div><label>ชื่อ<input name="name" required maxlength="30" value="${esc(m.name)}"></label><label>ตำแหน่ง<input name="role" maxlength="30" value="${esc(m.role||'')}"></label><label>เปลี่ยนรูป (ไม่เลือก = ใช้รูปเดิม)<input type="file" name="img" accept="image/*"></label>${m.img?'<label class="chk"><input type="checkbox" name="rmimg"> ลบรูปปัจจุบัน</label>':''}<div class="row"><button type="button" class="ghost" data-act="team" data-id="${t.id}">ยกเลิก</button><button class="pri">บันทึก</button></div></form>`);
+}
+function bSync(){
+  const B=S.bracket;if(!B)return;
+  B.rounds.forEach((rd,r)=>rd.forEach((m,i)=>{
+    if(r>0){const na=B.rounds[r-1][2*i].w||null,nb=B.rounds[r-1][2*i+1].w||null;if(m.a!==na||m.b!==nb)m.w=null;m.a=na;m.b=nb}
+    if(r===0&&m.a&&!m.b)m.w=m.a;
+    if(m.w&&m.w!==m.a&&m.w!==m.b)m.w=null;
+  }));
+}
+function bBuild(force){
+  let ids=S.bsel.filter(id=>S.teams.some(t=>t.id===id));
+  if(ids.length<2)return notify('เลือกอย่างน้อย 2 ทีมก่อนสร้างสาย');
+  if(S.bracket&&!force){ask('สร้างสายใหม่จะลบสายเดิม ต้องการต่อไหม?').then(ok=>{if(ok)bBuild(true)});return}
+  if($('#bshuffle').checked)ids=ids.map(v=>[Math.random(),v]).sort((x,y)=>x[0]-y[0]).map(x=>x[1]);
+  let size=2;while(size<ids.length)size*=2;
+  const slots=ids.concat(Array(size-ids.length).fill(null)),r0=[];
+  for(let i=0;i<size/2;i++)r0.push({a:slots[i],b:slots[size-1-i],w:null});
+  const rounds=[r0];
+  for(let n=size/4;n>=1;n/=2)rounds.push(Array.from({length:n},()=>({a:null,b:null,w:null})));
+  S.bracket={rounds};bSync();save();renderBracket();
+}
+function renderBracket(){
+  $('#bpick').innerHTML=S.teams.length
+    ?'<button class="chip" data-act="bAll">เลือกทุกทีม</button>'+S.teams.map(t=>`<button class="chip" aria-pressed="${S.bsel.includes(t.id)}" data-act="bTog" data-id="${t.id}">${esc(t.name)}</button>`).join('')
+    :'<p class="mut">ยังไม่มีทีม ไปสร้างทีมที่แท็บ "ทีม" ก่อน</p>';
+  const B=S.bracket,el=$('#bracket');
+  if(!B){el.innerHTML='<p class="mut">เลือกทีมแล้วกด "สร้างสายแข่ง"</p>';return}
+  const size=B.rounds[0].length*2,tm=id=>S.teams.find(t=>t.id===id)||{name:'(ทีมถูกลบ)',img:''};
+  const slot=(m,r,i,id)=>{
+    if(!id)return `<div class="sl empty">${r===0?'BYE':'รอผล'}</div>`;
+    const t=tm(id),cls=m.w?(m.w===id?' win':' lose'):'';
+    return `<button class="sl${cls}" ${m.a&&m.b?'':'disabled'} data-act="bWin" data-r="${r}" data-m="${i}" data-id="${id}">${thumb(t.img,t.name,'sm')}<span>${esc(t.name)}</span></button>`;
+  };
+  const label=r=>{const left=size/Math.pow(2,r);return left===2?'ชิงชนะเลิศ':left===4?'รอบรองชนะเลิศ':left===8?'รอบ 8 ทีม':'รอบ '+(r+1)};
+  const last=B.rounds[B.rounds.length-1][0],ch=last.w?tm(last.w):null;
+  el.innerHTML='<div class="rounds">'+B.rounds.map((rd,r)=>`<div class="rd"><h3>${label(r)}</h3><div class="ms">${rd.map((m,i)=>`<div class="mt">${slot(m,r,i,m.a)}${slot(m,r,i,m.b)}</div>`).join('')}</div></div>`).join('')
+    +`<div class="rd"><h3>แชมป์</h3><div class="ms">${ch?`<div class="champ">🏆 ${thumb(ch.img,ch.name,'sm')}<span>${esc(ch.name)}</span></div>`:'<div class="champ none">ยังไม่มีแชมป์</div>'}</div></div></div>`;
+}
+function setTab(id){
+  document.querySelectorAll('[data-tab]').forEach(d=>d.hidden=d.dataset.tab!==id);
+  document.querySelectorAll('.tab').forEach(b=>b.dataset.id===id?b.setAttribute('aria-current','page'):b.removeAttribute('aria-current'));
+}
+
+function formGame(){show(`<form data-form="game"><h2>เพิ่มเกม</h2><label>ชื่อเกม<input name="name" required maxlength="40"></label><label>รูปเกม<input type="file" name="img" accept="image/*"></label><div class="row"><button type="button" class="ghost" data-act="close">ยกเลิก</button><button class="pri">บันทึกเกม</button></div></form>`)}
+function formTeam(){show(`<form data-form="team"><h2>เพิ่มทีม</h2><label>ชื่อทีม<input name="name" required maxlength="40"></label><label>เกมที่เล่น<select name="game">${S.games.map(g=>`<option value="${g.id}">${esc(g.name)}</option>`).join('')}</select></label><label>รูปทีม<input type="file" name="img" accept="image/*"></label><div class="row"><button type="button" class="ghost" data-act="close">ยกเลิก</button><button class="pri">บันทึกทีม</button></div></form>`)}
+function teamView(id){
+  const t=S.teams.find(t=>t.id===id),g=S.games.find(g=>g.id===t.gameId);
+  show(`<div class="th">${thumb(t.img,t.name,'lg')}<div><h2>${esc(t.name)}</h2><p class="mut" style="margin:0">เล่น ${g?esc(g.name):'-'}</p></div><button type="button" class="ghost" data-act="editTeam" data-id="${t.id}" style="margin-left:auto">แก้ไขทีม</button></div>
+<h3>สมาชิก (${t.members.length})</h3>
+<ul class="mem">${t.members.map(m=>`<li>${thumb(m.img,m.name,'sm')}<span><b>${esc(m.name)}</b><br><small>${esc(m.role||'สมาชิก')}</small></span><button class="x" data-act="editMember" data-id="${m.id}" data-team="${t.id}" aria-label="แก้ไข ${esc(m.name)}">แก้ไข</button><button class="x" data-act="delMember" data-id="${m.id}" data-team="${t.id}" aria-label="ลบ ${esc(m.name)}">ลบ</button></li>`).join('')||'<li class="mut">ยังไม่มีสมาชิก เพิ่มคนแรกได้เลย</li>'}</ul>
+<form data-form="member" data-team="${t.id}"><h3>เพิ่มสมาชิก</h3><div class="row2"><input name="name" placeholder="ชื่อ" required maxlength="30" aria-label="ชื่อสมาชิก"><input name="role" placeholder="ตำแหน่ง เช่น กัปตัน" maxlength="30" aria-label="ตำแหน่ง"></div><input type="file" name="img" accept="image/*" aria-label="รูปสมาชิก"><div class="row"><button class="pri">เพิ่มสมาชิก</button></div></form>
+<div class="row"><button type="button" class="danger" data-act="delTeam" data-id="${t.id}">ลบทีม</button><button type="button" class="ghost" data-act="close">ปิด</button></div>`);
+}
+
+document.addEventListener('click',e=>{
+  const b=e.target.closest('[data-act]');if(!b)return;
+  const a=b.dataset.act,id=b.dataset.id;
+  if(a==='addGame')formGame();
+  else if(a==='addTeam'){if(!S.games.length)return notify('เพิ่มเกมก่อน แล้วค่อยสร้างทีม');formTeam()}
+  else if(a==='close')dlg.close();
+  else if(a==='filter'){filter=id;render()}
+  else if(a==='team')teamView(id);
+  else if(a==='delTeam'){ask('ลบทีมนี้และสมาชิกทั้งหมด?').then(ok=>{if(ok){S.teams=S.teams.filter(t=>t.id!==id);save();dlg.close();render()}})}
+  else if(a==='delMember'){const t=S.teams.find(t=>t.id===b.dataset.team);t.members=t.members.filter(m=>m.id!==id);save();render();teamView(t.id)}
+  else if(a==='editTeam')formEditTeam(id);
+  else if(a==='editMember')formEditMember(b.dataset.team,id);
+  else if(a==='bTog'){const k=S.bsel.indexOf(id);k>-1?S.bsel.splice(k,1):S.bsel.push(id);save();renderBracket()}
+  else if(a==='bAll'){S.bsel=S.teams.map(t=>t.id);save();renderBracket()}
+  else if(a==='bBuild')bBuild();
+  else if(a==='bReset'&&S.bracket){ask('ล้างสายแข่งทั้งหมด?').then(ok=>{if(ok){S.bracket=null;save();renderBracket()}})}
+  else if(a==='bWin'&&S.bracket){const m=S.bracket.rounds[+b.dataset.r][+b.dataset.m];m.w=m.w===id?null:id;bSync();save();renderBracket()}
+  else if(a==='tab')setTab(id);
+  else if(a==='spin')spin();
+  else if(a==='wAdd'){const i=$('#wname');wAdd(i.value);i.value='';i.focus()}
+  else if(a==='wFill'){const t=S.teams.find(t=>t.id===id),i=$('#wname');i.value=t.name;i.focus()}
+  else if(a==='wAll'){S.teams.forEach(t=>{if(!S.wheel.includes(t.name))S.wheel.push(t.name)});save();renderWheel()}
+  else if(a==='wDel'){S.wheel.splice(+id,1);save();renderWheel()}
+  else if(a==='wClear'){S.wheel=[];$('#result').textContent='';save();renderWheel()}
+  else if(a==='delGame'){if(S.teams.some(t=>t.gameId===id))return notify('มีทีมที่เล่นเกมนี้อยู่ ลบหรือย้ายทีมก่อน');S.games=S.games.filter(g=>g.id!==id);if(filter===id)filter='all';save();render()}
+});
+
+document.addEventListener('submit',async e=>{
+  const f=e.target.dataset.form;if(!f)return;
+  e.preventDefault();
+  const d=new FormData(e.target),img=await shrink(d.get('img')),name=d.get('name').trim();
+  if(f==='game')S.games.push({id:uid(),name,img});
+  if(f==='team')S.teams.push({id:uid(),name,img,gameId:d.get('game'),members:[]});
+  if(f==='member'){const t=S.teams.find(t=>t.id===e.target.dataset.team);t.members.push({id:uid(),name,role:d.get('role').trim(),img});save();render();return teamView(t.id)}
+  if(f==='editTeam'){
+    const t=S.teams.find(t=>t.id===e.target.dataset.id),old=t.name;
+    t.name=name;t.gameId=d.get('game');
+    if(img)t.img=img;else if(d.get('rmimg'))t.img='';
+    const k=S.wheel.indexOf(old);
+    if(k>-1){if(S.wheel.some((x,j)=>j!==k&&x.toLowerCase()===name.toLowerCase()))S.wheel.splice(k,1);else S.wheel[k]=name}
+    save();render();return teamView(t.id);
+  }
+  if(f==='editMember'){
+    const t=S.teams.find(t=>t.id===e.target.dataset.team),m=t.members.find(m=>m.id===e.target.dataset.id);
+    m.name=name;m.role=d.get('role').trim();
+    if(img)m.img=img;else if(d.get('rmimg'))m.img='';
+    save();render();return teamView(t.id);
+  }
+  save();dlg.close();render();
+});
+const cvar=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const cv=$('#wheel'),cx=cv.getContext('2d');
+let rot=0,spinning=false,win=-1;
+function draw(){
+  const n=S.wheel.length,R=320;
+  cx.clearRect(0,0,640,640);cx.save();cx.translate(R,R);
+  if(!n){
+    cx.beginPath();cx.arc(0,0,R-4,0,7);cx.fillStyle=cvar('--line');cx.fill();
+    cx.fillStyle=cvar('--mut');cx.textAlign='center';cx.textBaseline='middle';cx.font='700 28px Kanit,sans-serif';
+    cx.fillText('เพิ่มชื่อทีมเข้าวงล้อ',0,0);cx.restore();return;
+  }
+  const a=2*Math.PI/n;
+  S.wheel.forEach((name,i)=>{
+    cx.beginPath();cx.moveTo(0,0);cx.arc(0,0,R-4,rot+i*a,rot+(i+1)*a);cx.closePath();
+    cx.globalAlpha=(win<0||win===i)?1:.3;cx.fillStyle='hsl('+((i*137.5)%360)+' 70% 68%)';cx.fill();cx.strokeStyle=win===i?cvar('--ink'):'#fff';cx.lineWidth=win===i?8:3;cx.stroke();
+    cx.save();cx.rotate(rot+(i+.5)*a);cx.textAlign='right';cx.textBaseline='middle';cx.fillStyle='#14151f';
+    cx.font='700 '+Math.max(16,Math.min(30,260/n+8))+'px Kanit,sans-serif';
+    cx.fillText(name.length>14?name.slice(0,13)+'…':name,R-24,0);cx.restore();
+  });
+  cx.globalAlpha=1;cx.beginPath();cx.arc(0,0,22,0,7);cx.fillStyle=cvar('--ink');cx.fill();cx.restore();
+}
+function renderWheel(){
+  $('#wpick').innerHTML=S.teams.length
+    ?'<button class="chip" data-act="wAll">เลือกทุกทีม</button>'+S.teams.map(t=>`<button class="chip" aria-pressed="${S.wheel.includes(t.name)}" data-act="wFill" data-id="${t.id}">${esc(t.name)}</button>`).join('')
+    :'<p class="mut">ยังไม่มีทีม พิมพ์ชื่อเองได้เลย</p>';
+  $('#wlist').innerHTML=S.wheel.map((n,i)=>`<span class="gc"><span style="padding-left:10px">${esc(n)}</span><button class="x" data-act="wDel" data-id="${i}" aria-label="เอา ${esc(n)} ออก">×</button></span>`).join('')||'<p class="mut">ยังไม่มีชื่อในวงล้อ</p>';
+  draw();
+}
+function wAdd(name){
+  name=name.trim();
+  if(!name||S.wheel.some(x=>x.toLowerCase()===name.toLowerCase()))return;
+  S.wheel.push(name);save();renderWheel();
+}
+function spin(){
+  const n=S.wheel.length;
+  if(spinning)return;
+  if(n<2)return notify('ใส่ชื่ออย่างน้อย 2 ทีมก่อนหมุน');
+  const T=2*Math.PI,a=T/n,i=Math.floor(Math.random()*n);
+  const base=-Math.PI/2-(i+.5+(Math.random()-.5)*.7)*a;
+  const delta=(((base-rot)%T)+T)%T+T*(5+Math.floor(Math.random()*3));
+  const r0=rot,t0=performance.now(),dur=4800;
+  spinning=true;win=-1;$('#spin').disabled=true;$('#result').textContent='';
+  const done=()=>{
+    rot=r0+delta;win=i;draw();spinning=false;$('#spin').disabled=false;
+    $('#result').textContent='ได้ '+S.wheel[i];
+    confetti();
+    if($('#wremove').checked){const w=S.wheel[i];setTimeout(()=>{const k=S.wheel.indexOf(w);if(k>-1){S.wheel.splice(k,1);save();renderWheel()}},1800)}
+  };
+  let last=-1;
+  const f=t=>{const p=Math.min(1,(t-t0)/dur);rot=r0+delta*(1-Math.pow(1-p,3));draw();const k=Math.floor((((-Math.PI/2-rot)%T)+T)%T/a);if(k!==last){if(last>=0)tick();last=k}p<1?requestAnimationFrame(f):done()};
+  dur?requestAnimationFrame(f):done();
+}
+const ptr=document.querySelector('.ptr');
+function tick(){ptr.classList.remove('tick');void ptr.offsetWidth;ptr.classList.add('tick')}
+const fx=$('#fx'),fc=fx.getContext('2d');
+function confetti(){
+  const ps=Array.from({length:90},()=>({x:320,y:250,vx:(Math.random()-.5)*18,vy:-Math.random()*15-4,r:Math.random()*6.28,vr:(Math.random()-.5)*.4,c:'hsl('+Math.floor(Math.random()*360)+' 85% 60%)',w:10+Math.random()*10}));
+  let f=0;
+  (function step(){
+    fc.clearRect(0,0,640,640);
+    ps.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.vy+=.45;p.r+=p.vr;fc.save();fc.translate(p.x,p.y);fc.rotate(p.r);fc.fillStyle=p.c;fc.fillRect(-p.w/2,-p.w/4,p.w,p.w/2);fc.restore()});
+    if(++f<120)requestAnimationFrame(step);else fc.clearRect(0,0,640,640);
+  })();
+}
+$('#wname').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();wAdd(e.target.value);e.target.value=''}});
+matchMedia('(prefers-color-scheme:dark)').addEventListener('change',draw);
+if(document.fonts)document.fonts.ready.then(draw);
+render();
+</script>
+</body>
+</html>
